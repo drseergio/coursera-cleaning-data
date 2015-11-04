@@ -15,6 +15,9 @@ pathTrain <- "train"
 
 pathOutput <- "tidy_data.txt"
 
+# read the variable names
+variableNames <- fread(file.path(path, pathVariableNames))
+
 ## Read information for a given data set from related text files on disk.
 ## The function expects "UCI HAR Dataset" folder to be present in the current
 ## working directory.
@@ -28,7 +31,6 @@ readDataSet <- function(dataset) {
         path,
         dataset,
         paste("X_", dataset, ".txt", sep="")))
-    variableNames <- fread(file.path(path, pathVariableNames))
     activityIds <- fread(file.path(
         path,
         dataset,
