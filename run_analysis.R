@@ -1,3 +1,8 @@
+## This script reads data from files provided by "Human Activity Recognition
+## Using Smartphones Dataset" project and then merges the data into a single
+## tidy data set. Script assumes the data is placed in current working
+## directory in "UCI HAR Dataset" subfolder.
+
 library(data.table)
 library(dplyr)
 
@@ -19,12 +24,10 @@ pathOutput <- "tidy_data.txt"
 ## Returns a processed data frame. The data frame contains variable names,
 ## observations, subject ids.
 readDataSet <- function(dataset) {
-    # read observations from a text file
     observations <- fread(file.path(
         path,
         dataset,
         paste("X_", dataset, ".txt", sep="")))
-    
     variableNames <- fread(file.path(path, pathVariableNames))
     activityIds <- fread(file.path(
         path,
@@ -35,14 +38,14 @@ readDataSet <- function(dataset) {
         dataset,
         paste("subject_", dataset, ".txt", sep="")))
     
-    # assign column names from labels df
+    # assign column names from labels' dataframe
     names(observations) <- variableNames[, V2]
     # bind column with activity ids
+    names(activityIds) <- "activity_id"
     observations <- cbind(observations, activityIds)
-    names(observations)[562] <- "activity_id"
     # bind column with subject ids
+    names(subjectIds) <- "subject_id"
     observations <- cbind(observations, subjectIds)
-    names(observations)[563] <- "subject_id"
     # keep only the columns we need
     observations <- observations %>% select(
         contains("mean()"), contains("std()"), activity_id, subject_id)
